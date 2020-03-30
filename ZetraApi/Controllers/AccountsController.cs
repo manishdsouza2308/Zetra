@@ -21,12 +21,13 @@ namespace Zetra.Controllers
             _signinmanager = signInManager;
         }
         // GET api/values
+        [HttpPost]
         [Route("api/accounts")]
         public async Task<ActionResult> Register()
         {
             Stream request =  Request.Body;
             StreamReader streamReader = new StreamReader(request);
-            var json = streamReader.ReadToEndAsync();
+            var json = await streamReader.ReadToEndAsync();
             return Ok(json);
             
 
@@ -39,6 +40,16 @@ namespace Zetra.Controllers
             //    return Ok("Signed In");
             //}
             //return Ok(result.Errors);
+
+            
+
+
+        }
+        [HttpGet]
+        [Route("api/home")]
+        public ActionResult Home()
+        {
+            return Ok("Working");
         }
     }
 }
