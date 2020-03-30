@@ -49,7 +49,7 @@ namespace Zetra.Controllers
         [Route("api/home")]
         public ActionResult Home()
         {
-            return Ok("Working");
+            return Ok("It worked");
         }
     }
 }
