@@ -46,8 +46,8 @@ namespace Zetra.Controllers
 
         }
         [HttpGet]
-        [Route("api/home")]
-        public ActionResult Home()
+        [Route("api/test")]
+        public ActionResult Test()
         {
             return Ok("It worked");
         }
