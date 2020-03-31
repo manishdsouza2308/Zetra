@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,12 +40,8 @@ namespace Zetra.Controllers
             //    await _signinmanager.SignInAsync(newUser, true);
             //    return Ok("Signed In");
             //}
-            //return Ok(result.Errors);
-
-            
-
-
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("api/test")]
         public ActionResult Test()

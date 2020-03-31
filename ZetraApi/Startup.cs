@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace Zetra
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddControllers();
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<UsersContext>();
             services.AddDbContext<UsersContext>(a => a.UseSqlServer(Configuration.GetConnectionString("IdentityUsers")));
         }
@@ -44,8 +45,11 @@ namespace Zetra
             {
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
