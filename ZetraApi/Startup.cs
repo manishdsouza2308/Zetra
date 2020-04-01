@@ -47,10 +47,20 @@ namespace Zetra
             }
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
+            try
             {
-                endpoints.MapControllers();
-            });
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                });
+            }
+            catch(Exception ex)
+            {
+                app.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync("Hello World!");
+                });
+            }
         }
     }
 }
