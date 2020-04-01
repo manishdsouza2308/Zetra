@@ -46,6 +46,7 @@ namespace Zetra
                 app.UseHsts();
             }
             app.UseRouting();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
