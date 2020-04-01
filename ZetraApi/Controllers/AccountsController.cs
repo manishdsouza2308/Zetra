@@ -41,7 +41,8 @@ namespace Zetra.Controllers
             //    return Ok("Signed In");
             //}
         }
-        
+       
+        [Route("api/test")]
         public ActionResult Test()
         {
             return Ok("It worked");
