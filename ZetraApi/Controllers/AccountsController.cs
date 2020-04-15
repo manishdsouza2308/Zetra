@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using ZetraApi;
 
 namespace Zetra.Controllers
 {
@@ -26,26 +28,56 @@ namespace Zetra.Controllers
         [Route("api/accounts")]
         public async Task<ActionResult> Register()
         {
-            Stream request =  Request.Body;
+            try
+            { 
+                Stream request =  Request.Body;
+                StreamReader streamReader = new StreamReader(request);
+                var json = await streamReader.ReadToEndAsync();
+           
+
+                var deserialize = JsonConvert.DeserializeObject<IdentityUser>(json);
+                //var identity = new IdentityUser()
+                //{
+                //    Email = deserialize.email,
+                //    UserName = deserialize.username,
+                //    PasswordHash = deserialize.password
+                //};
+                await _usermanger.CreateAsync(deserialize, deserialize.PasswordHash);
+                await _signinmanager.SignInAsync(deserialize, true);
+                if(_signinmanager.IsSignedIn(User))
+                {
+                    return Ok("signed in");
+                }
+                return Ok("sign in failed");
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex);
+            }
+                      
+        }
+
+        [Route("api/login")]
+        public async Task<ActionResult> Login()
+        {
+            Stream request = Request.Body;
             StreamReader streamReader = new StreamReader(request);
             var json = await streamReader.ReadToEndAsync();
-            return Ok(json);
-            
+            var deserialize = JsonConvert.DeserializeObject<IdentityUser>(json);
 
-            //var newUser = new IdentityUser { Email = email, PasswordHash = password, UserName = username };
-            //var result = await _usermanger.CreateAsync(newUser, password);
+            var login = await _signinmanager.PasswordSignInAsync(deserialize.UserName, deserialize.PasswordHash,true,false);
 
-            //if (result.Succeeded)
-            //{
-            //    await _signinmanager.SignInAsync(newUser, true);
-            //    return Ok("Signed In");
-            //}
+            if(login.Succeeded)
+            return Ok("logged in");
+
+            return Ok("login failed");
+        }
+        
+        [Route("api/test")]
+        public ActionResult test()
+        {
+            return Ok("working");
         }
        
-        [Route("api/test")]
-        public ActionResult Test()
-        {
-            return Ok("It worked");
-        }
     }
 }

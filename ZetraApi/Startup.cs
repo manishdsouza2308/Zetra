@@ -32,6 +32,7 @@ namespace Zetra
             services.AddControllers();
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<UsersContext>();
             services.AddDbContext<UsersContext>(a => a.UseSqlServer(Configuration.GetConnectionString("IdentityUsers")));
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +47,7 @@ namespace Zetra
                 app.UseHsts();
             }
             app.UseRouting();
+            app.UseAuthentication();
 
             try
             {
